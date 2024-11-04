@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Music Player</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-image: url('m_img.jpeg');
+            background-size:cover;
+background-repeat:no-repeat;color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            color:#000;
+            background-color:#eee;
+            opacity:0.8;
+            padding: 20px;
+            text-align: center;
+            height:200px;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .player {
+            text-align: center;
+            background: #fff;
+            opacity:0.7;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: #fff;
+            border: none;
+            padding: 10px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #282c34;
+            display: flex;
+            align-items: center;
+        }
+
+        .control-btn:hover {
+            background: #897867;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #61dafb;
+            border-radius: 50%;
+        }
+
+        footer {
+            background: #3e4146;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+    <header>
+        <h1 style="color:#000;">Simple Music Player</h1>
+        <p style="color:#000;">Listen the music</p>
+<p style="color:#000;">Feel the music</p><p style="color:#000;">Enjoy the music</p>
+    </header>
+    <main>
+        <div class="player">
+            <audio id="audio"></audio>
+            <div class="controls">
+                <button id="prev" class="control-btn">
+                                        Prev
+                </button>
+                <button id="play" class="control-btn">
+                                        Play
+                </button>
+                <button id="pause" class="control-btn">
+                                        Pause
+                </button>
+                <button id="next" class="control-btn">
+                                        Next
+                </button>
+            </div>
+            <input type="range" id="progress" value="0" step="1" />
+            <input type="range" id="volume" value="1" step="0.1" min="0" max="1" />
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Simple Music Player</p>
+    </footer>
+    <script>
+        const audio = document.getElementById('audio');
+        const playBtn = document.getElementById('play');
+        const pauseBtn = document.getElementById('pause');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        const progress = document.getElementById('progress');
+        const volume = document.getElementById('volume');
+
+        // Sample audio files (update these paths to match your actual file names)
+        const tracks = [
+            "m1.mp3",
+            "m2.mp3",
+            "m3.mp3",
+            "m4.mp3" ,"m5.mp3","m6.mp3","m7.mp3"       ];
+        let currentTrackIndex = 0;
+
+        function loadTrack(index) {
+            audio.src = tracks[index];
+            audio.load();
+        }
+
+        function playTrack() {
+            audio.play();
+        }
+
+        function pauseTrack() {
+            audio.pause();
+        }
+
+        function updateProgress() {
+            progress.value = (audio.currentTime / audio.duration) * 100 || 0;
+        }
+
+        function setProgress(e) {
+            const progressPercent = e.target.value;
+            audio.currentTime = (progressPercent / 100) * audio.duration;
+        }
+
+        function changeVolume(e) {
+            audio.volume = e.target.value;
+        }
+
+        playBtn.addEventListener('click', playTrack);
+        pauseBtn.addEventListener('click', pauseTrack);
+        audio.addEventListener('timeupdate', updateProgress);
+        progress.addEventListener('input', setProgress);
+        volume.addEventListener('input', changeVolume);
+
+        prevBtn.addEventListener('click', () => {
+            currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+            loadTrack(currentTrackIndex);
+            playTrack();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+            loadTrack(currentTrackIndex);
+            playTrack();
+        });
+
+        // Load the first track on start
+        loadTrack(currentTrackIndex);
+    </script>
+</body>
+</html>
+
+
+
